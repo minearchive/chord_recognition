@@ -5,7 +5,7 @@ pub fn chord_recognize(mut notes: Vec<u8>) -> String {
     let mut chord: String = String::from("");
     let mut intervals: Vec<u8> = vec![];
 
-    notes.retain(|&note|  note < 0 && 128 < note);
+    notes.retain(|&note|  128 < note);
 
     if notes.len() < 2 {
         return String::from("")
@@ -56,7 +56,7 @@ pub fn chord_recognize(mut notes: Vec<u8>) -> String {
             [0, 3, 7] => "Minor",
             [0, 4, 6] => "(-5)",
             [0, 3, 6] => "m-5",
-            [0, 4, 7] => "aug",
+            [0, 4, 8] => "aug",
             [0, 3, 8] => "m+5",
             [0, 5, 7] => "sus4",
             [0, 2, 7] => "sus2",
@@ -90,7 +90,7 @@ pub fn chord_recognize(mut notes: Vec<u8>) -> String {
             //6 tension chord
             [0, 2, 4, 5, 7, 10] => "11",
             [0, 2, 3, 6, 7, 10] => "+11",
-            [0, 2, 4, 5, 7, 10] => "Minor 11",
+            [0, 2, 3, 5, 7, 10] => "Minor 11",
             [0, 2, 3, 6, 7, 10] => "Minor + 11",
             [0, 2, 4, 5, 7, 11] => "Major 11",
             [0, 2, 3, 5, 7, 11] => "Minor Major 11",
@@ -107,4 +107,14 @@ pub fn chord_recognize(mut notes: Vec<u8>) -> String {
     );
 
     chord
+}
+
+#[cfg(test)]
+mod test {
+    use crate::chord_recognize;
+
+    #[test]
+    fn main() {
+        print!("{}", chord_recognize(vec![60, 63, 67, 69]))
+    }
 }
