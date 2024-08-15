@@ -1,14 +1,14 @@
 
 // https://github.com/kkkgg/chord_finder/blob/6d905887bb2cea69da847b65a8a14d9ce9bcb286/js/chord_finder.js#L289
 
-pub fn chord_recognize(mut notes: Vec<u8>) -> &'static str {
+pub fn chord_recognize(mut notes: Vec<u8>) -> String {
     let mut chord: String = String::from("");
     let mut intervals: Vec<u8> = vec![];
 
     notes.retain(|&note|  note < 0 && 128 < note);
 
     if notes.len() < 2 {
-        return ""
+        return String::from("")
     }
 
     notes.sort();
@@ -106,5 +106,5 @@ pub fn chord_recognize(mut notes: Vec<u8>) -> &'static str {
         }
     );
 
-    &*chord
+    chord
 }
