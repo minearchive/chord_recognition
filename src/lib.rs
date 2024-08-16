@@ -5,11 +5,7 @@ pub fn chord_recognize(mut notes: Vec<u8>) -> String {
     let mut chord: String = String::from("");
     let mut intervals: Vec<u8> = vec![];
 
-    notes.retain(|&note|  128 < note);
-
-    if notes.len() < 2 {
-        return String::from("")
-    }
+    notes.retain(|&note| note < 128);
 
     notes.sort();
 
@@ -31,23 +27,16 @@ pub fn chord_recognize(mut notes: Vec<u8>) -> String {
         }
     );
 
+    chord.push_str(" ");
+
     for note in notes {
         if !intervals.contains(&(note % 12)) {
             intervals.push(note % 12)
         }
     }
 
-    let mut interval_distances: Vec<u8> = Vec::new();
-    for i in 1..intervals.len() {
-        interval_distances.push((intervals[i] + 12 - intervals[i - 1]) % 12);
-    }
-
-    if !intervals.is_empty() {
-        interval_distances.push((intervals[0] + 12 - intervals[intervals.len() - 1]) % 12);
-    }
-
     chord.push_str(
-        match interval_distances.as_slice() {
+        match intervals.as_slice() {
             //2 chord
             [0, 7] => "5",
 
@@ -63,9 +52,9 @@ pub fn chord_recognize(mut notes: Vec<u8>) -> String {
 
             //4 chord
             [0, 4, 7, 9] => "6",
-            [0, 3, 7, 9] => "m6",
+            [0, 3, 7, 9] => "Minor 6",
             [0, 4, 7, 10] => "7",
-            [0, 3, 7, 10] => "m7",
+            [0, 3, 7, 10] => "Minor 7",
             [0, 4, 7, 11] => "Major 7",
             [0, 3, 7, 11] => "Minor Major 7",
             [0, 4, 6, 10] => "7-5",
@@ -89,7 +78,7 @@ pub fn chord_recognize(mut notes: Vec<u8>) -> String {
 
             //6 tension chord
             [0, 2, 4, 5, 7, 10] => "11",
-            [0, 2, 3, 6, 7, 10] => "+11",
+            [0, 2, 4, 6, 7, 10] => "+11",
             [0, 2, 3, 5, 7, 10] => "Minor 11",
             [0, 2, 3, 6, 7, 10] => "Minor + 11",
             [0, 2, 4, 5, 7, 11] => "Major 11",
@@ -102,7 +91,7 @@ pub fn chord_recognize(mut notes: Vec<u8>) -> String {
             [0, 2, 4, 5, 7, 9, 11] => "Major 13",
             [0, 2, 3, 5, 7, 9, 11] => "Minor Major 13",
 
-            _ => "",
+            _ => "Nan"
         }
     );
 
